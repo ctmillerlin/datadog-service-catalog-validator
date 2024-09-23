@@ -1,0 +1,619 @@
+apiVersion: v3
+kind: system
+metadata:
+  name: consumer
+  displayName: Consumer
+  owner: consumer
+  tags:
+    - "domain:growth"
+  additionalOwners:
+    - name: Jonathan Guo
+      type: tech_lead
+    - name: Peter Chang
+      type: manager
+  contacts:
+    - name: Support Slack
+      type: slack
+      contact: https://remarkable-foods.slack.com/archives/C014BBS0K7F
+    - name: Tech Lead
+      type: slack
+      contact: https://remarkable-foods.slack.com/team/U015CQYMF54
+  links:
+    - name: Runbook
+      type: runbook
+      url: https://wonder.atlassian.net/wiki/spaces/TP/pages/3187868674/Consumer+Tech+Playbook
+      provider: Confluence
+    - name: Source
+      type: repo
+      provider: github
+      url: https://github.com/food-truck/foodtruck-project
+    - name: Jira
+      type: other
+      url: https://wonder.atlassian.net/jira/software/c/projects/CON/boards/13
+      provider: Jira
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: critical
+  components:
+    - service:apns-service
+    - service:branch-integration-service
+    - service:braze-integration-service
+    - service:cache
+    - service:chef-video-integration-service
+    - service:chef-video-service
+    - service:consumer-delivery-zone-service
+    - service:credit-card-service
+    - service:customer-service
+    - service:customer-survey-service
+    - service:customer-wallet-service
+    - service:etl-service
+    - service:image-api
+    - service:image-service
+    - service:marketing-service
+    - service:marketing-site
+    - service:merchandising-site
+    - service:mobile-api
+    - service:movableink-integration-service
+    - service:order-number-service
+    - service:pop-api
+    - service:restaurant-recommendation-service
+    - service:restaurant-service-v2
+    - service:scheduler-service
+    - service:search-service
+    - service:search-service-separation
+    - service:survey-web-api
+    - service:user-service
+    - service:wonder-app-task-service
+    - service:wonder-cart-service
+    - service:wonder-portal-cms-site
+    - service:wonder-portal-service
+    - service:wonder-portal-site
+    - service:wonder-portal-site-builder
+    - service:wonder-setting-service
+    - service:wonder-setting-site
+    - service:wonder-spot-site
+    - service:wonder-web-api
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: apns-service
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: high
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: branch-integration-service
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: low
+  dependsOn:
+    - service:marketing-service
+    - service:marketing-service
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: braze-integration-service
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: low
+  dependsOn:
+    - service:customer-service
+    - service:marketing-service
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: cache
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: low
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: chef-video-integration-service
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: low
+  dependsOn:
+    - service:chef-video-service
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: chef-video-service
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: high
+  dependsOn:
+    - service:order-search-service
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: consumer-delivery-zone-service
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: critical
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: credit-card-service
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: critical
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: customer-service
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: critical
+  dependsOn:
+    - service:credit-card-service
+    - service:payment-service
+    - service:tax-service
+    - service:delivery-zone-service
+    - service:kitchen-management-service
+    - service:consumer-delivery-zone-service
+    - service:customer-wallet-service
+    - service:marketing-service
+    - service:order-service
+    - service:restaurant-service-v2
+    - service:user-service
+    - service:wonder-setting-service
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: customer-survey-service
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: low
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: customer-wallet-service
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: critical
+  dependsOn:
+    - service:customer-service-interface
+    - service:marketing-service
+    - service:wonder-setting-service
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: etl-service
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: high
+  dependsOn:
+    - service:customer-service-interface
+    - service:restaurant-service-v2
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: image-api
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: low
+  dependsOn:
+    - service:image-service
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: image-service
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: low
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: marketing-service
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: critical
+  dependsOn:
+    - service:image-service
+    - service:order-search-service
+    - service:customer-survey-service
+    - service:kitchen-management-service
+    - service:customer-service
+    - service:wonder-setting-service
+    - service:search-service
+    - service:restaurant-service-v2
+    - service:order-service
+    - service:customer-wallet-service
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: marketing-site
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: low
+  dependsOn:
+    - service:marketing-service
+    - service:kitchen-management-service
+    - service:customer-service
+    - service:restaurant-service-v2
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: merchandising-site
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: low
+  dependsOn:
+    - service:kitchen-management-service
+    - service:recipe-service-v2
+    - service:consumer-delivery-zone-service
+    - service:restaurant-service-v2
+    - service:tax-service
+    - service:wonder-setting-service
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: mobile-api
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: critical
+  dependsOn:
+    - service:customer-service
+    - service:user-service
+    - service:tax-service
+    - service:delivery-zone-service
+    - service:kitchen-management-service
+    - service:courier-task-service
+    - service:wonder-cart-service
+    - service:customer-wallet-service
+    - service:gift-card-order-service
+    - service:etl-service
+    - service:order-number-service
+    - service:order-service
+    - service:order-search-service
+    - service:hdr-inventory-service
+    - service:restaurant-recommendation-service
+    - service:search-service
+    - service:recipe-service-v2
+    - service:wonder-setting-service
+    - service:marketing-service
+    - service:restaurant-service-v2
+    - service:payment-service
+    - service:customer-survey-service
+    - service:consumer-delivery-zone-service
+    - service:zendesk-integration-service
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: movableink-integration-service
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: high
+  dependsOn:
+    - service:search-service-separation
+    - service:restaurant-service-v2
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: order-number-service
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: critical
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: pop-api
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: critical
+  dependsOn:
+    - service:customer-service
+    - service:user-service
+    - service:tax-service
+    - service:delivery-zone-service
+    - service:kitchen-management-service
+    - service:courier-task-service
+    - service:wonder-cart-service
+    - service:customer-wallet-service
+    - service:gift-card-order-service
+    - service:etl-service
+    - service:order-number-service
+    - service:order-service
+    - service:order-search-service
+    - service:hdr-inventory-service
+    - service:restaurant-recommendation-service
+    - service:search-service
+    - service:recipe-service-v2
+    - service:wonder-setting-service
+    - service:marketing-service
+    - service:restaurant-service-v2
+    - service:payment-service
+    - service:kitchen-order-service
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: restaurant-recommendation-service
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: high
+  dependsOn:
+    - service:wonder-setting-service
+    - service:search-service
+    - service:restaurant-service-v2
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: restaurant-service-v2
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: critical
+  dependsOn:
+    - service:recipe-service-v2
+    - service:tax-service
+    - service:image-service
+    - service:search-service
+    - service:wonder-setting-service
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: scheduler-service
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: high
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: search-service
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: critical
+  dependsOn:
+    - service:restaurant-service-v2
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: search-service-separation
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: high
+  dependsOn:
+    - service:restaurant-service-v2
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: survey-web-api
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: low
+  dependsOn:
+    - service:customer-survey-service
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: user-service
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: critical
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: wonder-app-task-service
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: low
+  dependsOn:
+    - service:restaurant-service-v2
+    - service:consumer-delivery-zone-service
+    - service:customer-service
+    - service:search-service
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: wonder-cart-service
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: critical
+  dependsOn:
+    - service:customer-wallet-service
+    - service:search-service
+    - service:wonder-setting-service
+    - service:order-service
+    - service:marketing-service
+    - service:restaurant-service-v2
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: wonder-portal-cms-site
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: high
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: wonder-portal-service
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: high
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: wonder-portal-site
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: critical
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: wonder-portal-site-builder
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: high
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: wonder-setting-service
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: high
+  dependsOn:
+    - service:image-service
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: wonder-setting-site
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: low
+  dependsOn:
+    - service:wonder-setting-service
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: wonder-spot-site
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: low
+  dependsOn:
+    - service:wonder-setting-service
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: wonder-web-api
+integrations:
+  pagerduty:
+    serviceURL: https://wonder.pagerduty.com/service-directory/PGMG10P
+spec:
+  tier: critical
+  dependsOn:
+    - service:customer-service
+    - service:user-service
+    - service:tax-service
+    - service:delivery-zone-service
+    - service:kitchen-management-service
+    - service:courier-task-service
+    - service:wonder-cart-service
+    - service:customer-wallet-service
+    - service:gift-card-order-service
+    - service:etl-service
+    - service:order-number-service
+    - service:order-service
+    - service:order-search-service
+    - service:hdr-inventory-service
+    - service:restaurant-recommendation-service
+    - service:search-service
+    - service:recipe-service-v2
+    - service:wonder-setting-service
+    - service:marketing-service
+    - service:restaurant-service-v2
+    - service:payment-service
